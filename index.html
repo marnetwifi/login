@@ -236,22 +236,6 @@
     font-size:11.5px;
     color:var(--muted);
   }
-  .plan .sigbars{
-    display:flex;
-    align-items:flex-end;
-    gap:2px;
-    height:13px;
-  }
-  .plan .sigbars i{
-    width:4px;
-    border-radius:1px;
-    background:var(--line);
-  }
-  .plan .sigbars i.on{background:var(--ink);}
-  .plan .sigbars i:nth-child(1){height:4px;}
-  .plan .sigbars i:nth-child(2){height:7px;}
-  .plan .sigbars i:nth-child(3){height:10px;}
-  .plan .sigbars i:nth-child(4){height:13px;}
 
   .share-note{
     font-size:12px;
@@ -713,17 +697,6 @@
   var plans = [];
   var plansExtra = [];
 
-  function barsFor(price){
-    if(price <= 10) return 1;
-    if(price <= 25) return 2;
-    if(price <= 135) return 3;
-    return 4;
-  }
-  function barsHtml(n){
-    var out = "";
-    for(var i=1;i<=4;i++){ out += '<i class="'+(i<=n?'on':'')+'"></i>'; }
-    return '<span class="sigbars">'+out+'</span>';
-  }
   function renderGrid(el, list){
     el.innerHTML = list.map(function(pl, idx){
       return '<button class="plan'+(pl.popular?' popular':'')+'" data-idx="'+idx+'" data-src="'+el.id+'">'
@@ -732,7 +705,6 @@
         + '<span class="price"><em>Ksh</em>'+pl.p+'</span>'
         + '<span class="meta">'
         +   '<span>'+(pl.devices > 1 ? pl.devices+' devices' : '1 device')+'</span>'
-        +   barsHtml(barsFor(pl.p))
         + '</span>'
         + '</button>';
     }).join('');
