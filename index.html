@@ -533,9 +533,11 @@
     </div>
 
     <div class="grid" id="planGrid"></div>
-    <p class="share-note">Every plan connects one device. Using it on more than one may get it blocked &mdash; see the multi-device options below if you need to cover a second device.</p>
+    <p class="share-note">  Enjoy surfing </p>
 
-    <h1 class="section-title"><span>More devices</span></h1>
+    <h1 class="section-title"><span>
+      🌐
+    </span></h1>
     <div class="grid" id="planGridExtra"></div>
 
   </main>
@@ -686,13 +688,13 @@
     {id:null, d:"30 min", p:5,   popular:false, devices:1},
     {id:null, d:"1 hr",   p:8,   popular:false, devices:1},
     {id:null, d:"3 hrs",  p:10,  popular:false, devices:1},
-    {id:null, d:"12 hrs", p:20,  popular:true,  devices:1},
+    {id:null, d:"5 hrs", p:14,  popular:false,  devices:1},
     {id:null, d:"24 hrs", p:25,  popular:true,  devices:1},
-    {id:null, d:"3 days", p:55,  popular:false, devices:1},
-    {id:null, d:"1 week", p:135, popular:false, devices:1},
+    {id:null, d:"3 days", p:60,  popular:false, devices:1},
+    {id:null, d:"1 week", p:140, popular:false, devices:1},
     {id:null, d:"2 weeks",p:270, popular:false, devices:1},
     {id:null, d:"1 month",p:579, popular:false, devices:1},
-    {id:null, d:"1 month",p:900, popular:false, devices:2}
+   // {id:null, d:"1 month",p:900, popular:false, devices:2}
   ];
   var plans = [];
   var plansExtra = [];
@@ -924,7 +926,7 @@
   var voucherInput = document.getElementById('voucherInput');
   var voucherMsg = document.getElementById('voucherMsg');
   var voucherSubmit = document.getElementById('voucherSubmit');
-  var MAX_ATTEMPTS = 10;
+  var MAX_ATTEMPTS = 5;
 
   var attempts = 0;
   try{ attempts = parseInt(sessionStorage.getItem('mn_voucher_attempts') || '0', 10) || 0; }catch(e){}
@@ -935,7 +937,7 @@
     voucherInput.disabled = true;
     voucherSubmit.disabled = true;
     voucherMsg.className = 'field-msg bad';
-    voucherMsg.textContent = 'Too many attempts. Please call us for help.';
+    voucherMsg.textContent = 'Too many attempts. Please call us for help.Thankyou';
   }
   if(attempts >= MAX_ATTEMPTS) lockVoucherInput();
 
