@@ -700,6 +700,8 @@
   var plansExtra = [];
 
   function renderGrid(el, list){
+    // The 2-device grid is commented out in the HTML above; skip it if missing.
+    if(!el) return;
     el.innerHTML = list.map(function(pl, idx){
       return '<button class="plan'+(pl.popular?' popular':'')+'" data-idx="'+idx+'" data-src="'+el.id+'">'
         + (pl.popular ? '<span class="tag">POPULAR</span>' : '')
