@@ -44,7 +44,7 @@
     background:var(--paper);
   }
 
-  /* ---------- header ---------- */
+  /* ----------  ---------- */
   header.top{
     background:linear-gradient(160deg,var(--ink) 0%,var(--ink-soft) 100%);
     color:#fff;
@@ -116,7 +116,7 @@
 
   main{flex:1; padding:0 18px 28px; margin-top:-30px; position:relative;}
 
-  /* ---------- already-paid strip ---------- */
+  /* ----------   ---------- */
   .reconnect{
     background:var(--panel);
     border-radius:var(--radius);
@@ -145,7 +145,6 @@
   .btn-ghost:active{background:var(--ink); color:#fff;}
   .btn-ghost:disabled{opacity:.5; cursor:not-allowed;}
 
-  /* ---------- section heading ---------- */
   .section-title{
     font-size:12px;
     font-weight:800;
@@ -169,7 +168,6 @@
     text-align:right;
   }
 
-  /* ---------- package grid ---------- */
   .grid{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -248,7 +246,6 @@
     padding:10px 12px;
   }
 
-  /* ---------- voucher panel ---------- */
   .voucher-box{
     background:var(--panel);
     border-radius:var(--radius);
@@ -358,7 +355,6 @@
     text-align:center;
   }
 
-  /* ---------- backend wake-up status ---------- */
   .net-status{
     display:flex;
     align-items:center;
@@ -386,7 +382,6 @@
     .net-status .dot{animation:none;}
   }
 
-  /* ---------- overlay sheet ---------- */
   .overlay{
     position:fixed;
     inset:0;
@@ -559,12 +554,10 @@
 
 </div>
 
-<!-- bottom sheet used for both purchase flow and reconnect flow -->
 <div class="overlay" id="overlay">
   <div class="sheet">
     <button class="close" id="sheetClose" aria-label="Close"></button>
 
-    <!-- purchase confirm -->
     <div class="state" id="stateConfirm">
       <h2 id="confirmTitle">Confirm your plan</h2>
       <p>You'll get an M-Pesa prompt on your phone, then connect automatically.</p>
@@ -578,14 +571,14 @@
       <button class="btn-main" id="confirmPay">Pay &amp; connect</button>
     </div>
 
-    <!-- connecting -->
+    <!--  -->
     <div class="state" id="stateConnecting">
       <div class="spinner"></div>
       <h2>Connecting&hellip;</h2>
       <p id="connectingMsg">Checking your device. This can take up to 30 seconds.</p>
     </div>
 
-    <!-- success -->
+    <!--  -->
     <div class="state" id="stateSuccess">
       <div class="icon-circle good">&#10003;</div>
       <h2>You're connected</h2>
@@ -594,7 +587,7 @@
       <button class="btn-ghost" style="width:100%; padding:13px 0; margin-top:14px;" id="successContinue">Continue</button>
     </div>
 
-    <!-- welcome -->
+    <!--  -->
     <div class="state" id="stateWelcome">
       <div class="bars-lg"><i></i><i></i><i></i><i></i></div>
       <h2>Welcome to MarNet WiFi</h2>
@@ -602,7 +595,7 @@
       <button class="btn-main" id="welcomeDone">Start browsing</button>
     </div>
 
-    <!-- error -->
+   
     <div class="state" id="stateError">
       <div class="icon-circle bad">&#33;</div>
       <h2 id="errorTitle">Couldn't connect</h2>
@@ -618,7 +611,6 @@
 
   var API_BASE = "https://marnetwifi.onrender.com";
 
-  // ---- device details come from the MikroTik redirect (?mac=..&ip=..) ----
   function getDevice(){
     var qs = new URLSearchParams(window.location.search);
     var mac = qs.get('mac') || qs.get('client-mac') || null;
@@ -630,7 +622,6 @@
     };
   }
   var device = getDevice();
-  // Keep the device details if this page is reloaded without the redirect params.
   try{
     if(device.mac){ sessionStorage.setItem('mn_device', JSON.stringify(device)); }
     else {
@@ -656,8 +647,6 @@
     });
   }
 
-  // ---- phone numbers: accept 07.., 01.., 2547.., 2541.., +254.. ----
-  // Returns the local 10-digit form (07XXXXXXXX / 01XXXXXXXX) or '' if invalid.
   function toLocalPhone(raw){
     var v = String(raw || '').replace(/[^\d]/g, '');
     if(v.indexOf('254') === 0) v = '0' + v.slice(3);
@@ -665,7 +654,6 @@
     return /^0[71]\d{8}$/.test(v) ? v : '';
   }
 
-  // ---- wake the backend up (Render free tier sleeps after ~15 min) ----
   (function wakeBackend(){
     var box = document.getElementById('netStatus');
     var label = document.getElementById('netStatusText');
@@ -682,8 +670,6 @@
     setTimeout(function(){ settle(false); }, 4500);
   })();
 
-  // ---- plans: loaded from the backend so admin changes show up here ----
-  // This list is only a fallback for when the backend can't be reached yet.
   var fallbackPlans = [
     {id:null, d:"30 min", p:5,   popular:false, devices:1},
     {id:null, d:"1 hr",   p:8,   popular:false, devices:1},
@@ -700,7 +686,6 @@
   var plansExtra = [];
 
   function renderGrid(el, list){
-    // The 2-device grid is commented out in the HTML above; skip it if missing.
     if(!el) return;
     el.innerHTML = list.map(function(pl, idx){
       return '<button class="plan'+(pl.popular?' popular':'')+'" data-idx="'+idx+'" data-src="'+el.id+'">'
@@ -739,7 +724,7 @@
     })
     .catch(function(){ /* keep the fallback list */ });
 
-  // ---- sheet state machine ----
+  
   var overlay = document.getElementById('overlay');
   var states = ['stateConfirm','stateConnecting','stateSuccess','stateWelcome','stateError'].map(function(id){
     return document.getElementById(id);
@@ -771,9 +756,6 @@
     }).join('');
   }
 
-  // ---- log the phone in on the MikroTik router ----
-  // The backend has already made the router user. This sends the browser to
-  // the router's own login address, which is what actually opens the internet.
   var loginStarted = false;
   function routerLogin(username, password){
     var base = device.linkLogin || 'http://192.168.88.1/login';
@@ -794,7 +776,6 @@
     var user = (data && data.hotspotUsername) || device.mac || '';
     var pass = (data && data.hotspotPassword) || device.mac || '';
     setTimeout(function(){ routerLogin(user, pass); }, 1500);
-    // If the browser doesn't leave this page, fall back to the welcome screen.
     welcomeTimer = setTimeout(goToWelcome, 9000);
   }
 
@@ -809,7 +790,6 @@
     openSheet('stateError');
   }
 
-  // ---- choose a plan -> confirm ----
   var activePlan = null;
   var phoneInput = document.getElementById('phoneInput');
   var phoneMsg = document.getElementById('phoneMsg');
@@ -833,7 +813,6 @@
     openSheet('stateConfirm');
   });
 
-  // ---- pay with M-Pesa ----
   confirmPayBtn.addEventListener('click', function(){
     var phone = toLocalPhone(phoneInput.value);
     if(!phone){
@@ -879,8 +858,6 @@
     }
   }
 
-  // Waits (up to about 2 minutes) for the payment to be confirmed AND the
-  // router user to exist.
   function pollBackend(checkoutRequestId){
     var maxAttempts = 40, attempt = 0;
     return new Promise(function(resolve, reject){
@@ -903,7 +880,6 @@
     });
   }
 
-  // ---- already paid -> reconnect this device ----
   document.getElementById('reconnectBtn').addEventListener('click', function(){
     document.getElementById('connectingMsg').textContent =
       'Checking this device for an active plan. This can take up to 30 seconds.';
@@ -922,7 +898,6 @@
   });
   document.getElementById('errorRetry').addEventListener('click', closeSheet);
 
-  // ---- voucher / pasted M-Pesa code ----
   var voucherBox = document.getElementById('voucherBox');
   var voucherToggle = document.getElementById('voucherToggle');
   var voucherInput = document.getElementById('voucherInput');
